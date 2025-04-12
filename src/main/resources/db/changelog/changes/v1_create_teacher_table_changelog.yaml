@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-teacher
+      author: matheus
+      changes:
+        - sqlFile:
+            path: db/changelog/datas/V1__create_teacher_table.sql
+        - tagDatabase:
+            tag: v1.0-teacher-table
+      rollback:
+        - sqlFile:
+            path: db/changelog/datas/rollback_V1__create_teacher_table.sql
