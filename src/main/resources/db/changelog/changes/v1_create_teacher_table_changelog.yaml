@@ -1,4 +1,13 @@
 databaseChangeLog:
+  # Para que o rollback por tag funcione corretamente, é necessário criar um changeset
+  # com a tag antes do changeset de alteração do banco.
+  - changeSet:
+      id: 001-tag-create-teacher
+      author: matheus
+      changes:
+        - tagDatabase:
+            tag: 001-tag-create-teacher
+
   - changeSet:
       id: 001-create-teacher
       author: matheus
@@ -6,7 +15,7 @@ databaseChangeLog:
         - sqlFile:
             path: db/changelog/datas/V1__create_teacher_table.sql
         - tagDatabase:
-            tag: v1.0-teacher-table
+            tag: 001-create-teacher
       rollback:
         - sqlFile:
             path: db/changelog/datas/rollback_V1__create_teacher_table.sql
