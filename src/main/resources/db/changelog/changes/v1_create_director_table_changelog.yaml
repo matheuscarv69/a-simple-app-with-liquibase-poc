@@ -1,0 +1,21 @@
+databaseChangeLog:
+  # Para que o rollback por tag funcione corretamente, é necessário criar um changeset
+  # com a tag antes do changeset de alteração do banco.
+  - changeSet:
+      id: 002-tag-create-director
+      author: matheus
+      changes:
+        - tagDatabase:
+            tag: 002-tag-create-director
+            
+  - changeSet:
+      id: 002-create-director
+      author: matheus
+      changes:
+        - sqlFile:
+            path: db/changelog/datas/V1__create_director_table.sql
+        - tagDatabase:
+            tag: 002-create-director
+      rollback:
+        - sqlFile:
+            path: db/changelog/datas/rollback_V1__create_director_table.sql
