@@ -1,52 +1,139 @@
-# Liquibase commands
+# ⚙️ A Simple App With Liquibase - POC
 
-### Descrição do comando
+Este projeto trata-se de uma **Prova de Conceito (POC)** sobre a integração do **Liquibase** em uma aplicação **Spring
+Boot 3.4.4** utilizando **Java 17**.
 
-O comando na linha 6 executa um rollback no banco de dados utilizando o Liquibase. Ele reverte a última alteração
-aplicada ao banco de dados, com base no arquivo de changelog especificado.
+[![GitHub stars](https://img.shields.io/github/stars/matheuscarv69/a-simple-app-with-liquibase-poc?color=7159)](https://github.com/matheuscarv69/a-simple-app-with-liquibase-poc/stargazers)
 
-#### Detalhes do comando:
+---
 
-- **`mvn liquibase:rollback`**: Executa o comando de rollback do Liquibase.
-- **`-Dliquibase.changeLogFile=src/main/resources/db/changelog/db.changelog-master.yaml`**: Especifica o arquivo de
-  changelog principal que contém o histórico de alterações.
-- **`-Dliquibase.rollbackCount=1`**: Define que será revertida apenas a última alteração (1 changeSet).
-- **`-Dliquibase.username=user`**: Informa o nome de usuário para conexão com o banco de dados.
-- **`-Dliquibase.password=password`**: Informa a senha para conexão com o banco de dados.
+## 🤔 O que é este projeto?
 
-#### Contexto:
+Esse projeto demonstra de forma simples como utilizar o **Liquibase** para versionamento e gerenciamento de alterações
+no banco de dados em uma aplicação Java com Spring Boot.
 
-Este comando é útil para desfazer alterações no banco de dados de forma controlada, especialmente em ambientes de
-desenvolvimento ou testes, onde é necessário reverter mudanças específicas.
+---
 
-### Exemplo de execução do comando
+## 🛠 Tecnologias utilizadas
+
+- Java 17
+- Spring Boot 3.4.4
+    - Spring Web
+    - Spring Data JPA
+    - Spring Boot DevTools
+- Liquibase
+- PostgreSQL
+- Lombok
+- Docker & Docker Compose
+
+---
+
+## 🐳 Executando com Docker
+
+O projeto já possui um arquivo `docker-compose.yml` para subir um banco PostgreSQL configurado com os parâmetros
+necessários para rodar a aplicação localmente.
+
+### ✅ Pré-requisitos
+
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### ▶️ Subindo o banco de dados
 
 ```bash
-mvn liquibase:rollback -Dliquibase.changeLogFile=src/main/resources/db/changelog/db.changelog-master.yaml -Dliquibase.url=jdbc:postgresql://localhost:5432/liquibasedb -Dliquibase.rollbackCount=1 -Dliquibase.username=user -Dliquibase.password=password 
+docker-compose up -d
 ```
 
-### Descrição do comando
+O banco estará disponível em:
 
-O comando abaixo executa um rollback no banco de dados utilizando o Liquibase, revertendo as alterações aplicadas até
-uma tag específica definida no changelog.
+```
+jdbc:postgresql://localhost:5432/liquibasedb
+```
 
-#### Detalhes do comando:
+---
 
-- **`mvn liquibase:rollback`**: Executa o comando de rollback do Liquibase.
-- **`-Dliquibase.changeLogFile=src/main/resources/db/changelog/db.changelog-master.yaml`**: Especifica o arquivo de
-  changelog principal que contém o histórico de alterações.
-- **`-Dliquibase.rollbackTag=001-tag-create-teacher`**: Define a tag até onde o rollback será executado. Neste caso,
-  reverte todas as alterações feitas após a tag `001-tag-create-teacher `.
-- **`-Dliquibase.username=user`**: Informa o nome de usuário para conexão com o banco de dados.
-- **`-Dliquibase.password=password`**: Informa a senha para conexão com o banco de dados.
+## 🔁 Comandos Liquibase
 
-#### Contexto:
+Abaixo estão alguns exemplos de comandos úteis para executar **rollback** com o Liquibase.
 
-Este comando é útil para reverter o banco de dados para um estado específico, identificado por uma tag, garantindo maior
-controle sobre o processo de rollback. É especialmente útil em ambientes de desenvolvimento ou testes.
+---
 
-### Exemplo de execução do comando
+### 🔙 Rollback do último changeset
+
+Esse comando desfaz **a última alteração** aplicada ao banco de dados.
 
 ```bash
-mvn liquibase:rollback -Dliquibase.changeLogFile=src/main/resources/db/changelog/db.changelog-master.yaml -Dliquibase.url=jdbc:postgresql://localhost:5432/liquibasedb -Dliquibase.username=user -Dliquibase.password=password -Dliquibase.rollbackTag=001-tag-create-teacher
+mvn liquibase:rollback   -Dliquibase.changeLogFile=src/main/resources/db/changelog/db.changelog-master.yaml   -Dliquibase.url=jdbc:postgresql://localhost:5432/liquibasedb   -Dliquibase.rollbackCount=1   -Dliquibase.username=user   -Dliquibase.password=password
+```
 
+#### 📝 Explicação
+
+- `rollbackCount=1`: reverte apenas o último changeset aplicado.
+- `changeLogFile`: arquivo principal de changelog do projeto.
+- `url`, `username`, `password`: informações de acesso ao banco.
+
+---
+
+### 🏷️ Rollback até uma tag específica
+
+Esse comando reverte todas as alterações aplicadas **após uma tag específica** definida no changelog.
+
+```bash
+mvn liquibase:rollback   -Dliquibase.changeLogFile=src/main/resources/db/changelog/db.changelog-master.yaml   -Dliquibase.url=jdbc:postgresql://localhost:5432/liquibasedb   -Dliquibase.username=user   -Dliquibase.password=password   -Dliquibase.rollbackTag=001-tag-create-teacher
+```
+
+#### 📝 Explicação
+
+- `rollbackTag=001-tag-create-teacher`: define até onde o rollback será executado, mantendo as alterações anteriores à
+  tag.
+- Ideal para desfazer múltiplas mudanças de uma só vez.
+
+---
+
+## 📁 Organização do projeto
+
+```bash
+src
+└── main
+    ├── java
+    │   └── com.matheuscarv69.liquibase_poc
+    │       ├── application
+    │       │   └── controller
+    │       └── domain
+    │           ├── model
+    │           ├── repository
+    │           └── service
+    └── resources
+        ├── application.properties
+        ├── liquibase.properties
+        └── db
+            └── changelog
+                ├── db.changelog-master.yaml
+                ├── changes
+                └── datas
+
+```
+
+---
+
+## 👨🏻‍💻 Autor
+
+<a href="https://github.com/matheuscarv69">
+  <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/55814214?s=460&v=4" width="100px;" alt="Matheus Carvalho"/>
+  <br />
+  <sub><b>Matheus Carvalho</b></sub>
+</a>  
+<br />
+Feito com por Matheus Carvalho, entre em contato:
+
+<p align="left">
+  <a href="mailto:matheus9126@gmail.com" target="_blank">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/>
+  </a>
+  <a href="https://www.linkedin.com/in/matheus-carvalho69/" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
+  </a>
+  <a href="https://www.instagram.com/_mmcarvalho/" target="_blank">
+    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white"/>
+  </a>
+</p>
